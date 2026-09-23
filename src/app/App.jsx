@@ -13,6 +13,7 @@ import Button from "../shared/components/Button";
 import Card from "../shared/components/Card";
 import IconButton from "../shared/components/IconButton";
 import SectionHeader from "../shared/components/SectionHeader";
+import TaskPreview from "../features/tasks/components/TaskPreview";
 import "./App.css";
 
 const navigationItems = [
@@ -150,15 +151,9 @@ function App() {
             description="A clear view of what deserves your attention today."
           />
 
+          <TaskPreview />
+
           <div className="feature-grid">
-            <FeaturePlaceholder
-              id="tasks"
-              icon={CheckSquare2}
-              label="01 / Organize"
-              title="Tasks"
-              description="Turn open loops into a calm, visible workflow."
-              accent="accent-coral"
-            />
             <FeaturePlaceholder
               id="focus-timer"
               icon={Clock3}
