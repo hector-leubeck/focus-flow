@@ -14,6 +14,7 @@ import Card from "../shared/components/Card";
 import IconButton from "../shared/components/IconButton";
 import SectionHeader from "../shared/components/SectionHeader";
 import TaskPreview from "../features/tasks/components/TaskPreview";
+import FocusTimer from "../features/focus-timer/components/FocusTimer";
 import "./App.css";
 
 const navigationItems = [
@@ -154,14 +155,7 @@ function App() {
           <TaskPreview />
 
           <div className="feature-grid">
-            <FeaturePlaceholder
-              id="focus-timer"
-              icon={Clock3}
-              label="02 / Focus"
-              title="Focus timer"
-              description="Give your next important block a beginning and an end."
-              accent="accent-ochre"
-            />
+            <FocusTimer />
             <FeaturePlaceholder
               id="analytics"
               icon={BarChart3}
