@@ -52,11 +52,71 @@
 
 .task-column-list {
   display: grid;
+  min-height: 120px;
   gap: var(--space-3);
+  padding: var(--space-1);
+  border: 1px dashed transparent;
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.task-column-list.is-over {
+  border-color: var(--color-teal);
+  background: rgba(104, 185, 167, 0.12);
+}
+
+.sortable-task-card {
+  min-width: 0;
+  touch-action: manipulation;
+}
+
+.sortable-task-card .task-card.is-dragging {
+  border-color: var(--color-teal);
+  box-shadow: var(--shadow-floating);
+  opacity: 0.4;
+}
+
+.task-drag-handle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: -6px 0 -6px -6px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+
+.task-drag-handle:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.task-drag-handle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.task-drag-handle:active {
+  cursor: grabbing;
 }
 
 @media (max-width: 900px) {
   .task-board-preview {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-column-list {
+    transition: none;
   }
 }

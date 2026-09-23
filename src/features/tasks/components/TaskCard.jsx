@@ -1,6 +1,13 @@
-import { CalendarDays, CircleAlert } from "lucide-react";
+import {
+  CalendarDays,
+  CircleAlert,
+  Edit3,
+  GripVertical,
+  Trash2,
+} from "lucide-react";
 import Badge from "../../../shared/components/Badge";
 import Card from "../../../shared/components/Card";
+import IconButton from "../../../shared/components/IconButton";
 import "./TaskCard.css";
 
 const priorityLabels = {
@@ -24,16 +31,26 @@ function formatDueDate(date) {
   }).format(new Date(`${date}T00:00:00`));
 }
 
-function TaskCard({ task }) {
+function TaskCard({ task, onEdit, onDelete, dragHandleProps, isDragging }) {
   const overdue = isPastDue(task.dueDate);
 
   return (
     <Card
       as="article"
-      className={`task-card task-card-priority-${task.priority}${overdue ? " is-overdue" : ""}`}
+      className={`task-card task-card-priority-${task.priority}${overdue ? " is-overdue" : ""}${isDragging ? " is-dragging" : ""}`}
       aria-labelledby={`task-${task.id}-title`}
     >
       <div className="task-card-topline">
+        {dragHandleProps ? (
+          <button
+            className="task-drag-handle"
+            type="button"
+            aria-label={`Move ${task.title}`}
+            {...dragHandleProps}
+          >
+            <GripVertical size={15} aria-hidden="true" />
+          </button>
+        ) : null}
         <Badge tone={task.priority === "high" ? "danger" : "neutral"}>
           {priorityLabels[task.priority]}
         </Badge>
@@ -58,14 +75,32 @@ function TaskCard({ task }) {
             </Badge>
           ))}
         </div>
-        <time
-          className="task-due-date"
-          dateTime={task.dueDate}
-          aria-label={`${overdue ? "Overdue, " : "Due "}${formatDueDate(task.dueDate)}`}
-        >
-          <CalendarDays size={13} aria-hidden="true" />
-          {formatDueDate(task.dueDate)}
-        </time>
+        <div className="task-card-actions">
+          <time
+            className="task-due-date"
+            dateTime={task.dueDate}
+            aria-label={`${overdue ? "Overdue, " : "Due "}${formatDueDate(task.dueDate)}`}
+          >
+            <CalendarDays size={13} aria-hidden="true" />
+            {formatDueDate(task.dueDate)}
+          </time>
+          {onEdit ? (
+            <IconButton
+              label={`Edit ${task.title}`}
+              onClick={() => onEdit(task)}
+            >
+              <Edit3 size={14} />
+            </IconButton>
+          ) : null}
+          {onDelete ? (
+            <IconButton
+              label={`Delete ${task.title}`}
+              onClick={() => onDelete(task.id)}
+            >
+              <Trash2 size={14} />
+            </IconButton>
+          ) : null}
+        </div>
       </div>
     </Card>
   );

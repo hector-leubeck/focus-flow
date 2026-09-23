@@ -7,6 +7,8 @@ export const mockTasks = [
     tags: ["Planning"],
     dueDate: "2026-09-26",
     status: "backlog",
+    order: 0,
+    createdAt: "2026-09-21T09:00:00.000Z",
   },
   {
     id: "client-proposal",
@@ -16,6 +18,8 @@ export const mockTasks = [
     tags: ["Client", "Revenue"],
     dueDate: "2026-09-21",
     status: "in-progress",
+    order: 0,
+    createdAt: "2026-09-18T10:00:00.000Z",
   },
   {
     id: "roadmap-notes",
@@ -25,6 +29,8 @@ export const mockTasks = [
     tags: ["Strategy", "Product", "Writing"],
     dueDate: "2026-09-24",
     status: "in-progress",
+    order: 1,
+    createdAt: "2026-09-20T14:00:00.000Z",
   },
   {
     id: "inbox-zero",
@@ -34,6 +40,8 @@ export const mockTasks = [
     tags: ["Admin"],
     dueDate: "2026-09-23",
     status: "completed",
+    order: 0,
+    createdAt: "2026-09-17T08:30:00.000Z",
   },
   {
     id: "focus-block",
@@ -43,5 +51,7 @@ export const mockTasks = [
     tags: ["Focus", "Planning"],
     dueDate: "2026-09-25",
     status: "backlog",
+    order: 1,
+    createdAt: "2026-09-22T11:00:00.000Z",
   },
 ];

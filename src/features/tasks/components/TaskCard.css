@@ -30,7 +30,8 @@
 .task-card-topline,
 .task-card-footer,
 .task-overdue-label,
-.task-due-date {
+.task-due-date,
+.task-card-actions {
   display: flex;
   align-items: center;
 }
@@ -39,6 +40,23 @@
 .task-card-footer {
   justify-content: space-between;
   gap: var(--space-2);
+}
+
+.task-card-actions {
+  flex: 0 0 auto;
+  gap: var(--space-1);
+}
+
+.task-card-actions .ds-icon-button {
+  width: 28px;
+  height: 28px;
+  color: var(--color-muted);
+  background: transparent;
+}
+
+.task-card-actions .ds-icon-button:hover:not(:disabled) {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
 }
 
 .task-overdue-label {
