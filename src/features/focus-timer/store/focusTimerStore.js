@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import { safeLocalStorage } from "../../../shared/lib/persistence";
 import { DEFAULT_FOCUS_DURATION_SECONDS, TIMER_STATUSES } from "../timerConfig";
 import { getElapsedSeconds, getRemainingSeconds } from "../timerUtils";
 
@@ -11,6 +12,27 @@ const initialTimerState = {
   startedAt: null,
   sessions: [],
 };
+
+function sanitizeSessions(sessions) {
+  if (!Array.isArray(sessions)) {
+    return [];
+  }
+
+  return sessions.filter(
+    (session) =>
+      session &&
+      typeof session.id === "string" &&
+      Number.isFinite(session.durationSeconds) &&
+      session.durationSeconds >= 0 &&
+      typeof session.completedAt === "string",
+  );
+}
+
+function sanitizeDuration(durationSeconds) {
+  return Number.isFinite(durationSeconds) && durationSeconds > 0
+    ? Math.floor(durationSeconds)
+    : DEFAULT_FOCUS_DURATION_SECONDS;
+}
 
 export const useFocusTimerStore = create(
   persist(
@@ -94,7 +116,26 @@ export const useFocusTimerStore = create(
     }),
     {
       name: "focusflow-focus-timer",
-      storage: createJSONStorage(() => localStorage),
+      storage: safeLocalStorage,
+      partialize: ({ durationSeconds, sessions }) => ({
+        durationSeconds,
+        sessions,
+      }),
+      merge: (persistedState, currentState) => {
+        const durationSeconds = sanitizeDuration(
+          persistedState?.durationSeconds,
+        );
+
+        return {
+          ...currentState,
+          durationSeconds,
+          remainingSeconds: durationSeconds,
+          elapsedSeconds: 0,
+          startedAt: null,
+          status: TIMER_STATUSES.IDLE,
+          sessions: sanitizeSessions(persistedState?.sessions),
+        };
+      },
     },
   ),
 );

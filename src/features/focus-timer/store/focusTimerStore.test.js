@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { safeLocalStorage } from "../../../shared/lib/persistence";
 import { DEFAULT_FOCUS_DURATION_SECONDS, TIMER_STATUSES } from "../timerConfig";
 import { useFocusTimerStore } from "./focusTimerStore";
 
@@ -82,6 +83,39 @@ describe("focusTimerStore", () => {
         {
           durationSeconds: 60,
           completedAt: "1970-01-01T00:01:01.000Z",
+        },
+      ],
+    });
+  });
+
+  it("rehydrates sessions but discards a running timer state", async () => {
+    safeLocalStorage.setItem("focusflow-focus-timer", {
+      state: {
+        status: TIMER_STATUSES.RUNNING,
+        durationSeconds: DEFAULT_FOCUS_DURATION_SECONDS,
+        elapsedSeconds: 120,
+        startedAt: 1_000,
+        sessions: [
+          {
+            id: "session-1",
+            durationSeconds: 1_500,
+            completedAt: "2026-09-23T10:00:00.000Z",
+          },
+        ],
+      },
+      version: 0,
+    });
+
+    await useFocusTimerStore.persist.rehydrate();
+
+    expect(useFocusTimerStore.getState()).toMatchObject({
+      status: TIMER_STATUSES.IDLE,
+      elapsedSeconds: 0,
+      startedAt: null,
+      sessions: [
+        {
+          id: "session-1",
+          durationSeconds: 1_500,
         },
       ],
     });

@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import { mockTasks } from "../mockTasks";
-import { createTask, TASK_STATUSES } from "../taskModel";
+import { createTask, sanitizeStoredTasks, TASK_STATUSES } from "../taskModel";
+import { safeLocalStorage } from "../../../shared/lib/persistence";
 
 const statusOrder = Object.values(TASK_STATUSES);
 
@@ -111,7 +112,17 @@ export const useTasksStore = create(
     }),
     {
       name: "focusflow-tasks",
-      storage: createJSONStorage(() => localStorage),
+      storage: safeLocalStorage,
+      merge: (persistedState, currentState) => {
+        const storedTasks = sanitizeStoredTasks(persistedState?.tasks);
+
+        return {
+          ...currentState,
+          tasks: storedTasks
+            ? normalizeTaskOrder(storedTasks)
+            : currentState.tasks,
+        };
+      },
     },
   ),
 );

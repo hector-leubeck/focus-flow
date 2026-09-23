@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { sanitizeStoredTasks } from "../taskModel";
+import { safeLocalStorage } from "../../../shared/lib/persistence";
 import { useTasksStore } from "./tasksStore";
 
 describe("tasksStore", () => {
@@ -16,6 +18,35 @@ describe("tasksStore", () => {
     expect(task.title).toBe("Write brief");
     expect(useTasksStore.getState().tasks).toHaveLength(1);
     expect(useTasksStore.getState().tasks[0].status).toBe("backlog");
+  });
+
+  it("ignores malformed persisted task records", () => {
+    const tasks = sanitizeStoredTasks([
+      { id: "valid", title: "Keep me", status: "backlog", order: 0 },
+      { id: "invalid", status: "backlog" },
+    ]);
+
+    expect(tasks).toHaveLength(1);
+    expect(tasks[0].id).toBe("valid");
+  });
+
+  it("rehydrates tasks with their persisted order", async () => {
+    safeLocalStorage.setItem("focusflow-tasks", {
+      state: {
+        tasks: [
+          { id: "second", title: "Second", status: "backlog", order: 1 },
+          { id: "first", title: "First", status: "backlog", order: 0 },
+        ],
+      },
+      version: 0,
+    });
+
+    await useTasksStore.persist.rehydrate();
+
+    expect(useTasksStore.getState().tasks.map((task) => task.id)).toEqual([
+      "first",
+      "second",
+    ]);
   });
 
   it("edits an existing task without changing its id", () => {
