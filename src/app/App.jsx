@@ -1,122 +1,186 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import {
+  BarChart3,
+  CheckSquare2,
+  ChevronDown,
+  Clock3,
+  LayoutDashboard,
+  Menu,
+  Plus,
+  Sparkles,
+} from "lucide-react";
+import Badge from "../shared/components/Badge";
+import Button from "../shared/components/Button";
+import Card from "../shared/components/Card";
+import IconButton from "../shared/components/IconButton";
+import SectionHeader from "../shared/components/SectionHeader";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const navigationItems = [
+  { label: "Overview", icon: LayoutDashboard, href: "#overview" },
+  { label: "Tasks", icon: CheckSquare2, href: "#tasks" },
+  { label: "Focus timer", icon: Clock3, href: "#focus-timer" },
+  { label: "Analytics", icon: BarChart3, href: "#analytics" },
+];
 
+function Brand() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <a className="brand" href="#overview" aria-label="FocusFlow overview">
+      <span className="brand-mark" aria-hidden="true">
+        <Sparkles size={17} strokeWidth={2.4} />
+      </span>
+      <span>FocusFlow</span>
+    </a>
+  );
 }
 
-export default App
+function NavigationLink({ item, mobile = false }) {
+  const Icon = item.icon;
+
+  return (
+    <a
+      className={`navigation-link${item.label === "Overview" ? " is-active" : ""}${mobile ? " is-mobile" : ""}`}
+      href={item.href}
+    >
+      <Icon
+        size={mobile ? 19 : 18}
+        strokeWidth={item.label === "Overview" ? 2.3 : 1.9}
+      />
+      <span>{item.label}</span>
+    </a>
+  );
+}
+
+function Sidebar() {
+  return (
+    <aside className="sidebar">
+      <Brand />
+      <div className="sidebar-section-label">Workspace</div>
+      <nav className="navigation-list" aria-label="Main navigation">
+        {navigationItems.map((item) => (
+          <NavigationLink key={item.label} item={item} />
+        ))}
+      </nav>
+      <div className="sidebar-footer">
+        <div className="sidebar-footer-mark">FF</div>
+        <div>
+          <p className="sidebar-footer-title">Personal space</p>
+          <p className="sidebar-footer-caption">Local workspace</p>
+        </div>
+        <ChevronDown size={15} aria-hidden="true" />
+      </div>
+    </aside>
+  );
+}
+
+function MobileNavigation() {
+  return (
+    <nav className="mobile-navigation" aria-label="Mobile navigation">
+      {navigationItems.map((item) => (
+        <NavigationLink key={item.label} item={item} mobile />
+      ))}
+    </nav>
+  );
+}
+
+function DashboardHeader() {
+  return (
+    <header className="dashboard-header">
+      <div className="header-copy">
+        <p className="eyebrow">Wednesday, 23 September</p>
+        <h1>Good morning, Alex.</h1>
+        <p className="header-description">
+          Set the pace for a focused and intentional day.
+        </p>
+      </div>
+      <div className="header-actions">
+        <IconButton label="Open menu" className="mobile-menu-button">
+          <Menu size={19} />
+        </IconButton>
+        <Button className="new-task-button" disabled>
+          <Plus size={17} strokeWidth={2.5} />
+          <span>New task</span>
+        </Button>
+        <div className="avatar" aria-label="Alex Morgan">
+          AM
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function FeaturePlaceholder({
+  id,
+  icon: Icon,
+  label,
+  title,
+  description,
+  accent,
+}) {
+  return (
+    <Card
+      as="section"
+      className={`feature-placeholder ${accent}`}
+      id={id}
+      aria-labelledby={`${id}-title`}
+    >
+      <div className="placeholder-icon" aria-hidden="true">
+        <Icon size={21} strokeWidth={1.8} />
+      </div>
+      <div className="placeholder-copy">
+        <p className="placeholder-label">{label}</p>
+        <h2 id={`${id}-title`}>{title}</h2>
+        <p>{description}</p>
+      </div>
+      <Badge>Coming next</Badge>
+    </Card>
+  );
+}
+
+function App() {
+  return (
+    <div className="app-shell">
+      <Sidebar />
+      <div className="app-content">
+        <DashboardHeader />
+        <main className="dashboard-main" id="overview">
+          <SectionHeader
+            className="welcome-band"
+            eyebrow="Your command center"
+            title="Make room for deep work."
+            description="A clear view of what deserves your attention today."
+          />
+
+          <div className="feature-grid">
+            <FeaturePlaceholder
+              id="tasks"
+              icon={CheckSquare2}
+              label="01 / Organize"
+              title="Tasks"
+              description="Turn open loops into a calm, visible workflow."
+              accent="accent-coral"
+            />
+            <FeaturePlaceholder
+              id="focus-timer"
+              icon={Clock3}
+              label="02 / Focus"
+              title="Focus timer"
+              description="Give your next important block a beginning and an end."
+              accent="accent-ochre"
+            />
+            <FeaturePlaceholder
+              id="analytics"
+              icon={BarChart3}
+              label="03 / Reflect"
+              title="Analytics"
+              description="Notice the patterns behind your best working days."
+              accent="accent-teal"
+            />
+          </div>
+        </main>
+      </div>
+      <MobileNavigation />
+    </div>
+  );
+}
+
+export default App;
