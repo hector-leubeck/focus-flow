@@ -8,13 +8,12 @@ import {
   Plus,
   Sparkles,
 } from "lucide-react";
-import Badge from "../shared/components/Badge";
 import Button from "../shared/components/Button";
-import Card from "../shared/components/Card";
 import IconButton from "../shared/components/IconButton";
 import SectionHeader from "../shared/components/SectionHeader";
 import TaskPreview from "../features/tasks/components/TaskPreview";
 import FocusTimer from "../features/focus-timer/components/FocusTimer";
+import AnalyticsPanel from "../features/analytics/components/AnalyticsPanel";
 import "./App.css";
 
 const navigationItems = [
@@ -110,34 +109,6 @@ function DashboardHeader() {
   );
 }
 
-function FeaturePlaceholder({
-  id,
-  icon: Icon,
-  label,
-  title,
-  description,
-  accent,
-}) {
-  return (
-    <Card
-      as="section"
-      className={`feature-placeholder ${accent}`}
-      id={id}
-      aria-labelledby={`${id}-title`}
-    >
-      <div className="placeholder-icon" aria-hidden="true">
-        <Icon size={21} strokeWidth={1.8} />
-      </div>
-      <div className="placeholder-copy">
-        <p className="placeholder-label">{label}</p>
-        <h2 id={`${id}-title`}>{title}</h2>
-        <p>{description}</p>
-      </div>
-      <Badge>Coming next</Badge>
-    </Card>
-  );
-}
-
 function App() {
   return (
     <div className="app-shell">
@@ -156,14 +127,7 @@ function App() {
 
           <div className="feature-grid">
             <FocusTimer />
-            <FeaturePlaceholder
-              id="analytics"
-              icon={BarChart3}
-              label="03 / Reflect"
-              title="Analytics"
-              description="Notice the patterns behind your best working days."
-              accent="accent-teal"
-            />
+            <AnalyticsPanel />
           </div>
         </main>
       </div>
