@@ -1,3 +1,4 @@
+import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import Button from "../../../shared/components/Button";
 import { TASK_PRIORITIES, TASK_STATUSES } from "../taskModel";
@@ -10,6 +11,7 @@ const statusLabels = {
 };
 
 function TaskForm({ task, onSubmit, onCancel }) {
+  const reduceMotion = useReducedMotion();
   const [form, setForm] = useState({
     title: task?.title ?? "",
     description: task?.description ?? "",
@@ -38,12 +40,22 @@ function TaskForm({ task, onSubmit, onCancel }) {
   }
 
   return (
-    <div className="task-dialog-backdrop">
-      <section
+    <motion.div
+      className="task-dialog-backdrop"
+      initial={reduceMotion ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={reduceMotion ? undefined : { opacity: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.16 }}
+    >
+      <motion.section
         className="task-dialog"
         role="dialog"
         aria-modal="true"
         aria-labelledby="task-dialog-title"
+        initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={reduceMotion ? undefined : { opacity: 0, y: 6, scale: 0.99 }}
+        transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
       >
         <div className="task-dialog-header">
           <div>
@@ -127,8 +139,8 @@ function TaskForm({ task, onSubmit, onCancel }) {
             <Button type="submit">{task ? "Save changes" : "Add task"}</Button>
           </div>
         </form>
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
 

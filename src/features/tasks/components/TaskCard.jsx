@@ -5,6 +5,7 @@ import {
   GripVertical,
   Trash2,
 } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import Badge from "../../../shared/components/Badge";
 import Card from "../../../shared/components/Card";
 import IconButton from "../../../shared/components/IconButton";
@@ -33,12 +34,22 @@ function formatDueDate(date) {
 
 function TaskCard({ task, onEdit, onDelete, dragHandleProps, isDragging }) {
   const overdue = isPastDue(task.dueDate);
+  const reduceMotion = useReducedMotion();
+  const cardMotion = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 8 },
+        animate: { opacity: 1, y: 0 },
+        layout: true,
+        transition: { duration: 0.18, ease: "easeOut" },
+      };
 
   return (
     <Card
-      as="article"
+      as={motion.article}
       className={`task-card task-card-priority-${task.priority}${overdue ? " is-overdue" : ""}${isDragging ? " is-dragging" : ""}`}
       aria-labelledby={`task-${task.id}-title`}
+      {...cardMotion}
     >
       <div className="task-card-topline">
         {dragHandleProps ? (

@@ -8,6 +8,7 @@ import {
   Plus,
   Sparkles,
 } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 import Button from "../shared/components/Button";
 import IconButton from "../shared/components/IconButton";
 import SectionHeader from "../shared/components/SectionHeader";
@@ -75,12 +76,20 @@ function Sidebar() {
 }
 
 function MobileNavigation() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <nav className="mobile-navigation" aria-label="Mobile navigation">
+    <motion.nav
+      className="mobile-navigation"
+      aria-label="Mobile navigation"
+      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.2, ease: "easeOut" }}
+    >
       {navigationItems.map((item) => (
         <NavigationLink key={item.label} item={item} mobile />
       ))}
-    </nav>
+    </motion.nav>
   );
 }
 

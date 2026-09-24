@@ -1,4 +1,5 @@
 import { CheckCircle2, Clock3, Pause, Play, RotateCcw } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Button from "../../../shared/components/Button";
 import Card from "../../../shared/components/Card";
 import useFocusTimer from "../hooks/useFocusTimer";
@@ -14,6 +15,7 @@ const statusLabels = {
 };
 
 function FocusTimer() {
+  const reduceMotion = useReducedMotion();
   const {
     complete,
     durationSeconds,
@@ -48,13 +50,23 @@ function FocusTimer() {
         </div>
       </div>
 
-      <div className={`focus-timer-display is-${status}`} aria-live="polite">
-        <span className="focus-timer-status">{statusLabels[status]}</span>
-        <strong>{formatTimerTime(remainingSeconds)}</strong>
-        <span className="focus-timer-caption">
-          {Math.floor(durationSeconds / 60)} minute session
-        </span>
-      </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          className={`focus-timer-display is-${status}`}
+          aria-live="polite"
+          key={status}
+          initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+          transition={{ duration: reduceMotion ? 0 : 0.16, ease: "easeOut" }}
+        >
+          <span className="focus-timer-status">{statusLabels[status]}</span>
+          <strong>{formatTimerTime(remainingSeconds)}</strong>
+          <span className="focus-timer-caption">
+            {Math.floor(durationSeconds / 60)} minute session
+          </span>
+        </motion.div>
+      </AnimatePresence>
 
       <div className="focus-timer-actions">
         {status === TIMER_STATUSES.IDLE ? (

@@ -16,6 +16,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Plus } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import Button from "../../../shared/components/Button";
 import SectionHeader from "../../../shared/components/SectionHeader";
@@ -82,14 +83,16 @@ function TaskColumn({ column, tasks, onEdit, onDelete }) {
           items={tasks.map((task) => task.id)}
           strategy={verticalListSortingStrategy}
         >
-          {tasks.map((task) => (
-            <SortableTaskCard
-              key={task.id}
-              task={task}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          ))}
+          <AnimatePresence initial={false}>
+            {tasks.map((task) => (
+              <SortableTaskCard
+                key={task.id}
+                task={task}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            ))}
+          </AnimatePresence>
         </SortableContext>
       </div>
     </section>
@@ -192,13 +195,16 @@ function TaskPreview() {
           {activeTask ? <TaskCard task={activeTask} isDragging /> : null}
         </DragOverlay>
       </DndContext>
-      {isCreating || editingTask ? (
-        <TaskForm
-          task={editingTask}
-          onSubmit={handleSubmit}
-          onCancel={closeForm}
-        />
-      ) : null}
+      <AnimatePresence>
+        {isCreating || editingTask ? (
+          <TaskForm
+            key={editingTask?.id ?? "new-task"}
+            task={editingTask}
+            onSubmit={handleSubmit}
+            onCancel={closeForm}
+          />
+        ) : null}
+      </AnimatePresence>
     </section>
   );
 }

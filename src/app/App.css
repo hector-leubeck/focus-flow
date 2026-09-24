@@ -492,3 +492,9 @@
     font-size: 12px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .navigation-link {
+    transition: none;
+  }
+}

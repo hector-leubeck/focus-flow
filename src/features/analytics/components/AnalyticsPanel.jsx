@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { motion, useReducedMotion } from "motion/react";
 import Card from "../../../shared/components/Card";
 import SectionHeader from "../../../shared/components/SectionHeader";
 import { useFocusTimerStore } from "../../focus-timer/store/focusTimerStore";
@@ -27,10 +28,19 @@ import {
 import "./AnalyticsPanel.css";
 
 function Metric({ label, value, detail }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <div className="analytics-metric">
       <span>{label}</span>
-      <strong>{value}</strong>
+      <motion.strong
+        key={`${label}-${value}`}
+        initial={reduceMotion ? false : { opacity: 0.55, y: 3 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reduceMotion ? 0 : 0.16, ease: "easeOut" }}
+      >
+        {value}
+      </motion.strong>
       {detail ? <small>{detail}</small> : null}
     </div>
   );
