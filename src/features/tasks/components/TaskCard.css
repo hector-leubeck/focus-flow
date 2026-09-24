@@ -94,9 +94,16 @@
 
 .task-tags {
   display: flex;
+  margin: 0;
+  padding: 0;
   min-width: 0;
   flex-wrap: wrap;
+  list-style: none;
   gap: var(--space-1);
+}
+
+.task-tags li {
+  display: flex;
 }
 
 .task-tags .ds-badge {

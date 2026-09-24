@@ -11,6 +11,7 @@
 
 .task-dialog {
   width: min(100%, 540px);
+  margin: 0;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
   padding: var(--space-6);

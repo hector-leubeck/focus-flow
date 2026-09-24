@@ -79,13 +79,13 @@ function TaskCard({ task, onEdit, onDelete, dragHandleProps, isDragging }) {
       </div>
 
       <div className="task-card-footer">
-        <div className="task-tags" aria-label="Task tags">
+        <ul className="task-tags" aria-label="Task tags">
           {task.tags.map((tag) => (
-            <Badge key={tag} tone="success">
-              {tag}
-            </Badge>
+            <li key={tag}>
+              <Badge tone="success">{tag}</Badge>
+            </li>
           ))}
-        </div>
+        </ul>
         <div className="task-card-actions">
           <time
             className="task-due-date"

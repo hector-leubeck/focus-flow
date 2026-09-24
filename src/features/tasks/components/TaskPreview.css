@@ -53,10 +53,12 @@
 .task-column-list {
   display: grid;
   min-height: 120px;
+  margin: 0;
   gap: var(--space-3);
   padding: var(--space-1);
   border: 1px dashed transparent;
   border-radius: var(--radius-md);
+  list-style: none;
   transition:
     border-color var(--motion-fast),
     background-color var(--motion-fast);

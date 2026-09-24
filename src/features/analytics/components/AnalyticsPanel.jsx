@@ -110,7 +110,11 @@ function AnalyticsPanel() {
           ) : null}
         </div>
         {hasRecentActivity ? (
-          <div className="analytics-chart" aria-label="Focus activity chart">
+          <div
+            className="analytics-chart"
+            role="img"
+            aria-label="Focus activity chart showing completed focus minutes for the last seven days"
+          >
             <ResponsiveContainer width="100%" height={220}>
               <BarChart
                 data={recentActivity}

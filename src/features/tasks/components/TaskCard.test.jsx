@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import TaskCard from "./TaskCard";
 
@@ -62,5 +63,29 @@ describe("TaskCard", () => {
     expect(screen.getByText("Low")).toBeInTheDocument();
     expect(screen.queryByText("Overdue")).not.toBeInTheDocument();
     expect(screen.getByLabelText("Due Sep 26")).toBeInTheDocument();
+  });
+
+  it("activates edit and delete actions from the keyboard", async () => {
+    vi.useRealTimers();
+    const user = userEvent.setup();
+    const onEdit = vi.fn();
+    const onDelete = vi.fn();
+
+    render(<TaskCard task={baseTask} onEdit={onEdit} onDelete={onDelete} />);
+
+    const editButton = screen.getByRole("button", {
+      name: "Edit Review project brief",
+    });
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete Review project brief",
+    });
+
+    editButton.focus();
+    await user.keyboard("{Enter}");
+    deleteButton.focus();
+    await user.keyboard(" ");
+
+    expect(onEdit).toHaveBeenCalledWith(baseTask);
+    expect(onDelete).toHaveBeenCalledWith(baseTask.id);
   });
 });

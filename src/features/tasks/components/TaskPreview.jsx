@@ -44,7 +44,7 @@ function SortableTaskCard({ task, onEdit, onDelete }) {
   } = useSortable({ id: task.id });
 
   return (
-    <div
+    <li
       ref={setNodeRef}
       className="sortable-task-card"
       style={{
@@ -59,7 +59,7 @@ function SortableTaskCard({ task, onEdit, onDelete }) {
         onEdit={onEdit}
         onDelete={onDelete}
       />
-    </div>
+    </li>
   );
 }
 
@@ -73,9 +73,9 @@ function TaskColumn({ column, tasks, onEdit, onDelete }) {
     >
       <div className="task-column-heading">
         <h3 id={`${column.id}-title`}>{column.title}</h3>
-        <span>{tasks.length}</span>
+        <span aria-label={`${tasks.length} tasks`}>{tasks.length}</span>
       </div>
-      <div
+      <ul
         ref={setNodeRef}
         className={`task-column-list${isOver ? " is-over" : ""}`}
       >
@@ -94,7 +94,7 @@ function TaskColumn({ column, tasks, onEdit, onDelete }) {
             ))}
           </AnimatePresence>
         </SortableContext>
-      </div>
+      </ul>
     </section>
   );
 }
@@ -102,6 +102,7 @@ function TaskColumn({ column, tasks, onEdit, onDelete }) {
 function TaskPreview() {
   const [editingTask, setEditingTask] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
   const tasks = useTasksStore((state) => state.tasks);
   const addTask = useTasksStore((state) => state.addTask);
   const updateTask = useTasksStore((state) => state.updateTask);
@@ -124,11 +125,20 @@ function TaskPreview() {
   function handleSubmit(values) {
     if (editingTask) {
       updateTask(editingTask.id, values);
+      setAnnouncement(`Task ${values.title} updated.`);
     } else {
       addTask(values);
+      setAnnouncement(`Task ${values.title} added.`);
     }
 
     closeForm();
+  }
+
+  function handleDelete(taskId) {
+    const task = tasks.find((item) => item.id === taskId);
+
+    deleteTask(taskId);
+    setAnnouncement(task ? `Task ${task.title} deleted.` : "Task deleted.");
   }
 
   function handleDragStart({ active }) {
@@ -152,6 +162,14 @@ function TaskPreview() {
         overId: over.id,
         targetStatus,
       });
+      const movedTask = tasks.find((task) => task.id === active.id);
+      const targetColumn = columns.find((column) => column.id === targetStatus);
+
+      setAnnouncement(
+        movedTask && targetColumn
+          ? `${movedTask.title} moved to ${targetColumn.title}.`
+          : "Task position updated.",
+      );
     }
   }
 
@@ -173,6 +191,9 @@ function TaskPreview() {
           Add task
         </Button>
       </SectionHeader>
+      <div className="sr-only" role="status" aria-live="polite">
+        {announcement}
+      </div>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -187,7 +208,7 @@ function TaskPreview() {
               column={column}
               tasks={selectTasksByStatus(tasks, column.id)}
               onEdit={setEditingTask}
-              onDelete={deleteTask}
+              onDelete={handleDelete}
             />
           ))}
         </div>

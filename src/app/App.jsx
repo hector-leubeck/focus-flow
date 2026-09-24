@@ -4,13 +4,11 @@ import {
   ChevronDown,
   Clock3,
   LayoutDashboard,
-  Menu,
   Plus,
   Sparkles,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import Button from "../shared/components/Button";
-import IconButton from "../shared/components/IconButton";
 import SectionHeader from "../shared/components/SectionHeader";
 import ThemeToggle from "../shared/components/ThemeToggle";
 import TaskPreview from "../features/tasks/components/TaskPreview";
@@ -43,6 +41,7 @@ function NavigationLink({ item, mobile = false }) {
     <a
       className={`navigation-link${item.label === "Overview" ? " is-active" : ""}${mobile ? " is-mobile" : ""}`}
       href={item.href}
+      aria-current={item.label === "Overview" ? "page" : undefined}
     >
       <Icon
         size={mobile ? 19 : 18}
@@ -104,17 +103,14 @@ function DashboardHeader() {
         </p>
       </div>
       <div className="header-actions">
-        <IconButton label="Open menu" className="mobile-menu-button">
-          <Menu size={19} />
-        </IconButton>
         <ThemeToggle />
         <Button className="new-task-button" disabled>
           <Plus size={17} strokeWidth={2.5} />
           <span>New task</span>
         </Button>
-        <div className="avatar" aria-label="Alex Morgan">
+        <span className="avatar" role="img" aria-label="Alex Morgan">
           AM
-        </div>
+        </span>
       </div>
     </header>
   );

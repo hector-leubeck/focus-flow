@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../../../shared/components/Button";
 import { TASK_PRIORITIES, TASK_STATUSES } from "../taskModel";
 import "./TaskForm.css";
@@ -12,6 +12,7 @@ const statusLabels = {
 
 function TaskForm({ task, onSubmit, onCancel }) {
   const reduceMotion = useReducedMotion();
+  const dialogRef = useRef(null);
   const [form, setForm] = useState({
     title: task?.title ?? "",
     description: task?.description ?? "",
@@ -20,6 +21,55 @@ function TaskForm({ task, onSubmit, onCancel }) {
     dueDate: task?.dueDate ?? "",
     status: task?.status ?? TASK_STATUSES.BACKLOG,
   });
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const previousActiveElement = document.activeElement;
+
+    if (!dialog) {
+      return undefined;
+    }
+
+    const focusableSelector =
+      'button:not(:disabled), input:not(:disabled), textarea:not(:disabled), select:not(:disabled), [href], [tabindex]:not([tabindex="-1"])';
+    const focusFirstField = () =>
+      dialog.querySelector(focusableSelector)?.focus();
+
+    focusFirstField();
+
+    function handleKeyDown(event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCancel();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = [...dialog.querySelectorAll(focusableSelector)];
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement?.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement?.focus();
+      }
+    }
+
+    dialog.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      dialog.removeEventListener("keydown", handleKeyDown);
+      if (previousActiveElement instanceof HTMLElement) {
+        previousActiveElement.focus();
+      }
+    };
+  }, [onCancel]);
 
   function updateField(event) {
     const { name, value } = event.target;
@@ -47,10 +97,10 @@ function TaskForm({ task, onSubmit, onCancel }) {
       exit={reduceMotion ? undefined : { opacity: 0 }}
       transition={{ duration: reduceMotion ? 0 : 0.16 }}
     >
-      <motion.section
+      <motion.dialog
+        ref={dialogRef}
         className="task-dialog"
-        role="dialog"
-        aria-modal="true"
+        open
         aria-labelledby="task-dialog-title"
         initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -139,7 +189,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
             <Button type="submit">{task ? "Save changes" : "Add task"}</Button>
           </div>
         </form>
-      </motion.section>
+      </motion.dialog>
     </motion.div>
   );
 }
