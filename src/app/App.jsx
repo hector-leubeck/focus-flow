@@ -11,6 +11,7 @@ import {
 import Button from "../shared/components/Button";
 import IconButton from "../shared/components/IconButton";
 import SectionHeader from "../shared/components/SectionHeader";
+import ThemeToggle from "../shared/components/ThemeToggle";
 import TaskPreview from "../features/tasks/components/TaskPreview";
 import FocusTimer from "../features/focus-timer/components/FocusTimer";
 import AnalyticsPanel from "../features/analytics/components/AnalyticsPanel";
@@ -97,6 +98,7 @@ function DashboardHeader() {
         <IconButton label="Open menu" className="mobile-menu-button">
           <Menu size={19} />
         </IconButton>
+        <ThemeToggle />
         <Button className="new-task-button" disabled>
           <Plus size={17} strokeWidth={2.5} />
           <span>New task</span>

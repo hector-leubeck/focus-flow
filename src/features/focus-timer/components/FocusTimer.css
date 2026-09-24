@@ -16,7 +16,7 @@
   width: 125px;
   height: 125px;
   border-radius: 50%;
-  background: #f9e9c5;
+  background: var(--color-ochre-soft);
   content: "";
   opacity: 0.62;
 }

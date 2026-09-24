@@ -64,7 +64,7 @@
 
 .task-column-list.is-over {
   border-color: var(--color-teal);
-  background: rgba(104, 185, 167, 0.12);
+  background: var(--color-drop-hover);
 }
 
 .sortable-task-card {

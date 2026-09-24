@@ -124,11 +124,12 @@ function AnalyticsPanel() {
                   allowDecimals={false}
                 />
                 <Tooltip
-                  cursor={{ fill: "rgba(104, 185, 167, 0.1)" }}
+                  cursor={{ fill: "var(--color-chart-hover)" }}
                   contentStyle={{
                     border: "1px solid var(--color-border)",
                     borderRadius: "8px",
                     background: "var(--color-surface)",
+                    color: "var(--color-ink)",
                     fontSize: "11px",
                   }}
                   formatter={(value) => [`${value} min`, "Focus"]}

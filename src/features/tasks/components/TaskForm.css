@@ -5,7 +5,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-5);
-  background: rgba(24, 35, 34, 0.36);
+  background: var(--color-overlay);
 }
 
 .task-dialog {
@@ -16,7 +16,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
-  box-shadow: 0 24px 70px rgba(24, 35, 34, 0.2);
+  box-shadow: var(--shadow-modal);
 }
 
 .task-dialog-header,

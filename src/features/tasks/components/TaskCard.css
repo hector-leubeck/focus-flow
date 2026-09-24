@@ -14,7 +14,7 @@
 
 .task-card:hover {
   border-color: var(--color-border-strong);
-  box-shadow: 0 12px 28px rgba(46, 72, 60, 0.1);
+  box-shadow: var(--shadow-card-hover);
   transform: translateY(-2px);
 }
 
@@ -24,7 +24,7 @@
 }
 
 .task-card.is-overdue {
-  border-color: #e8c2bc;
+  border-color: var(--color-danger-border);
 }
 
 .task-card-topline,
