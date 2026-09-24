@@ -116,3 +116,14 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 390px) {
+  .focus-timer-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .focus-timer-actions .ds-button {
+    width: 100%;
+  }
+}

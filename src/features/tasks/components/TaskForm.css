@@ -5,6 +5,7 @@
   display: grid;
   place-items: center;
   padding: var(--space-5);
+  overflow-y: auto;
   background: var(--color-overlay);
 }
 
@@ -91,7 +92,13 @@
 }
 
 @media (max-width: 520px) {
+  .task-dialog-backdrop {
+    place-items: start center;
+    padding: 12px;
+  }
+
   .task-dialog {
+    max-height: calc(100vh - 24px);
     padding: var(--space-5);
   }
 
