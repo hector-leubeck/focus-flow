@@ -1,6 +1,6 @@
 # FocusFlow
 
-A frontend-focused productivity dashboard built with React and TypeScript.
+A frontend-focused productivity dashboard built with React and JavaScript.
 
 ## Development
 

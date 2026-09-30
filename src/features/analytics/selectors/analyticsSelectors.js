@@ -1,6 +1,4 @@
-import { TASK_STATUSES } from "../../tasks/taskModel";
-
-const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
+import { TASK_STATUSES } from '../../tasks/taskModel';
 
 export function selectCompletedTaskCount(tasks) {
   return tasks.filter((task) => task.status === TASK_STATUSES.COMPLETED).length;
@@ -23,7 +21,7 @@ export function selectCompletionRate(tasks) {
 export function selectTotalFocusSeconds(sessions) {
   return sessions.reduce(
     (total, session) => total + (session.durationSeconds ?? 0),
-    0,
+    0
   );
 }
 
@@ -31,29 +29,42 @@ export function selectFocusSessionCount(sessions) {
   return sessions.length;
 }
 
-function toDateKey(date) {
-  return date.toISOString().slice(0, 10);
+function toLocalDateKey(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 function formatDayLabel(date) {
-  return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+  }).format(date);
 }
 
 export function selectRecentFocusActivity(
   sessions,
-  { days = 7, now = new Date() } = {},
+  { days = 7, now = new Date() } = {}
 ) {
   const today = new Date(now);
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   return Array.from({ length: days }, (_, index) => {
-    const date = new Date(
-      today.getTime() - (days - index - 1) * DAY_IN_MILLISECONDS,
-    );
-    const dateKey = toDateKey(date);
-    const daySessions = sessions.filter((session) =>
-      session.completedAt?.startsWith(dateKey),
-    );
+    const date = new Date(today);
+    date.setDate(today.getDate() - (days - index - 1));
+
+    const dateKey = toLocalDateKey(date);
+
+    const daySessions = sessions.filter((session) => {
+      const completedAt = new Date(session.completedAt);
+
+      return toLocalDateKey(completedAt) === dateKey;
+    });
 
     return {
       date: dateKey,
@@ -61,8 +72,8 @@ export function selectRecentFocusActivity(
       focusMinutes: Math.round(
         daySessions.reduce(
           (total, session) => total + (session.durationSeconds ?? 0),
-          0,
-        ) / 60,
+          0
+        ) / 60
       ),
       sessions: daySessions.length,
     };
