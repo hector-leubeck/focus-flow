@@ -1,24 +1,24 @@
-import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import Button from "../../../shared/components/Button";
-import { TASK_PRIORITIES, TASK_STATUSES } from "../taskModel";
-import "./TaskForm.css";
+import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import Button from '../../../shared/components/Button';
+import { TASK_PRIORITIES, TASK_STATUSES } from '../taskModel';
+import './TaskForm.css';
 
 const statusLabels = {
-  [TASK_STATUSES.BACKLOG]: "Backlog",
-  [TASK_STATUSES.IN_PROGRESS]: "In progress",
-  [TASK_STATUSES.COMPLETED]: "Completed",
+  [TASK_STATUSES.BACKLOG]: 'Backlog',
+  [TASK_STATUSES.IN_PROGRESS]: 'In progress',
+  [TASK_STATUSES.COMPLETED]: 'Completed',
 };
 
 function TaskForm({ task, onSubmit, onCancel }) {
   const reduceMotion = useReducedMotion();
   const dialogRef = useRef(null);
   const [form, setForm] = useState({
-    title: task?.title ?? "",
-    description: task?.description ?? "",
+    title: task?.title ?? '',
+    description: task?.description ?? '',
     priority: task?.priority ?? TASK_PRIORITIES.MEDIUM,
-    tags: task?.tags?.join(", ") ?? "",
-    dueDate: task?.dueDate ?? "",
+    tags: task?.tags?.join(', ') ?? '',
+    dueDate: task?.dueDate ?? '',
     status: task?.status ?? TASK_STATUSES.BACKLOG,
   });
 
@@ -38,13 +38,13 @@ function TaskForm({ task, onSubmit, onCancel }) {
     focusFirstField();
 
     function handleKeyDown(event) {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         event.preventDefault();
         onCancel();
         return;
       }
 
-      if (event.key !== "Tab") {
+      if (event.key !== 'Tab') {
         return;
       }
 
@@ -61,10 +61,10 @@ function TaskForm({ task, onSubmit, onCancel }) {
       }
     }
 
-    dialog.addEventListener("keydown", handleKeyDown);
+    dialog.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      dialog.removeEventListener("keydown", handleKeyDown);
+      dialog.removeEventListener('keydown', handleKeyDown);
       if (previousActiveElement instanceof HTMLElement) {
         previousActiveElement.focus();
       }
@@ -83,7 +83,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
     onSubmit({
       ...form,
       tags: form.tags
-        .split(",")
+        .split(',')
         .map((tag) => tag.trim())
         .filter(Boolean),
     });
@@ -105,12 +105,12 @@ function TaskForm({ task, onSubmit, onCancel }) {
         initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={reduceMotion ? undefined : { opacity: 0, y: 6, scale: 0.99 }}
-        transition={{ duration: reduceMotion ? 0 : 0.18, ease: "easeOut" }}
+        transition={{ duration: reduceMotion ? 0 : 0.18, ease: 'easeOut' }}
       >
         <div className="task-dialog-header">
           <div>
             <p className="ds-eyebrow">Task details</p>
-            <h2 id="task-dialog-title">{task ? "Edit task" : "New task"}</h2>
+            <h2 id="task-dialog-title">{task ? 'Edit task' : 'New task'}</h2>
           </div>
           <Button variant="ghost" size="small" type="button" onClick={onCancel}>
             Close
@@ -178,7 +178,6 @@ function TaskForm({ task, onSubmit, onCancel }) {
                 type="date"
                 value={form.dueDate}
                 onChange={updateField}
-                required
               />
             </label>
           </div>
@@ -186,7 +185,7 @@ function TaskForm({ task, onSubmit, onCancel }) {
             <Button variant="ghost" type="button" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit">{task ? "Save changes" : "Add task"}</Button>
+            <Button type="submit">{task ? 'Save changes' : 'Add task'}</Button>
           </div>
         </form>
       </motion.dialog>
